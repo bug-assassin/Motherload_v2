@@ -1,18 +1,19 @@
 extends TileMap
 
+
+const TILE_SKY = Vector2i(0, 0)
+const TILE_DIRT = Vector2i(0, 4)
+const TILE_STONE = Vector2i(10, 4)
+const ATLAS_NO = 1
+
 func _ready():
-	# Set the tileset for the TileMap (replace "your_tileset" with the actual path to your tileset).
-	var tileset = preload("res://new_tile_set.tres")
-	set_tileset(tileset)
-
-	# Generate a 20x20 tilemap with random tiles.
 	for x in range(20):
-		for y in range(20):
-			# Get a random tile index from the tileset.
-			#var random_tile_index = randi() % tileset.get_tile_count()
-			# Set the random tile at the current position.
-			#self.set_cell(0, Vector2i(x, y), random_tile_index)
-			pass
-
-func process():
+		for y in range(7):
+			var tile = TILE_SKY if y < 2 else TILE_DIRT
+			if y == 3:
+				tile = TILE_STONE
+			set_cell(0, Vector2i(x, y), ATLAS_NO, tile)
+	print("finished")
+	
+func _process(delta):
 	pass
