@@ -1,6 +1,8 @@
-[gd_scene load_steps=7 format=3 uid="uid://b10y47qysgfla"]
+[gd_scene load_steps=11 format=3 uid="uid://b10y47qysgfla"]
 
 [ext_resource type="Script" path="res://UI/UI.gd" id="1_smrgu"]
+[ext_resource type="Animation" uid="uid://c0rs71y1ff0j" path="res://ore_pickup_anim.res" id="2_4crlg"]
+[ext_resource type="AudioStream" uid="uid://bl237ppgrf7l8" path="res://Sounds/cha-ching.wav" id="2_cqorl"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_i0p8b"]
 font_size = 24
@@ -16,6 +18,51 @@ bg_color = Color(0.494118, 0.494118, 0.0666667, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_n438o"]
 bg_color = Color(0.6, 0.6, 0.0823529, 1)
+
+[sub_resource type="Animation" id="Animation_g6yk2"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(254, 330)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:self_modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(0.85098, 0.847059, 0, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("AudioStreamPlayer:playing")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_2aq10"]
+_data = {
+"RESET": SubResource("Animation_g6yk2"),
+"ore_pickup_anim": ExtResource("2_4crlg")
+}
 
 [node name="UI" type="CanvasLayer"]
 script = ExtResource("1_smrgu")
@@ -106,3 +153,31 @@ offset_bottom = -13.0
 grow_horizontal = 2
 grow_vertical = 2
 text = "Fuel"
+
+[node name="OreNotificationLabel" type="Label" parent="Control"]
+self_modulate = Color(0.85098, 0.847059, 0, 0)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 254.0
+offset_top = 330.0
+offset_right = 380.0
+offset_bottom = 372.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+theme_override_font_sizes/font_size = 25
+text = "1 copper"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Control/OreNotificationLabel"]
+libraries = {
+"": SubResource("AnimationLibrary_2aq10")
+}
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="Control/OreNotificationLabel"]
+stream = ExtResource("2_cqorl")

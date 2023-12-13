@@ -1,10 +1,13 @@
-[gd_scene load_steps=7 format=3 uid="uid://d2anuxxlufs0f"]
+[gd_scene load_steps=10 format=3 uid="uid://d2anuxxlufs0f"]
 
 [ext_resource type="TileSet" uid="uid://ckkhb1582s6hh" path="res://new_tile_set.tres" id="1_rxiq0"]
 [ext_resource type="Script" path="res://GenerateGround.gd" id="2_qa7hi"]
 [ext_resource type="Script" path="res://Player.gd" id="3_3vj4k"]
 [ext_resource type="Texture2D" uid="uid://dlhblxipxktuu" path="res://tilemap_packed.png" id="4_87jwi"]
 [ext_resource type="PackedScene" uid="uid://b10y47qysgfla" path="res://UI/ui.tscn" id="5_32tqa"]
+[ext_resource type="AudioStream" uid="uid://ck2sxgi8hdif5" path="res://Sounds/main_track.mp3" id="7_bp28c"]
+[ext_resource type="Script" path="res://WallRepeater.gd" id="7_weu6l"]
+[ext_resource type="Texture2D" uid="uid://cg1jg3xqurcrq" path="res://background_0.png" id="8_5ejhd"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_or4ty"]
 size = Vector2(15.5, 15.5)
@@ -19,6 +22,7 @@ layer_0/tile_data = PackedInt32Array(-65535, 262145, 2, -65534, 327681, 2, -1310
 script = ExtResource("2_qa7hi")
 
 [node name="Player" type="CharacterBody2D" parent="."]
+position = Vector2(0, -30.245)
 script = ExtResource("3_3vj4k")
 
 [node name="Sprite2D" type="Sprite2D" parent="Player"]
@@ -32,16 +36,38 @@ zoom = Vector2(3, 3)
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Player"]
 shape = SubResource("RectangleShape2D_or4ty")
 
-[node name="RichTextLabel" type="RichTextLabel" parent="Player"]
-offset_left = -10.0
-offset_top = -4.0
-offset_right = 10.0
-offset_bottom = 3.0
-theme_override_colors/default_color = Color(0.839216, 0.843137, 0.176471, 1)
-theme_override_font_sizes/normal_font_size = 4
-text = "1 Osmium"
-fit_content = true
-scroll_active = false
-autowrap_mode = 0
+[node name="RayCast2D" type="RayCast2D" parent="Player"]
+target_position = Vector2(0, 10)
 
 [node name="UI" parent="." instance=ExtResource("5_32tqa")]
+
+[node name="WallManager" type="Node2D" parent="."]
+script = ExtResource("7_weu6l")
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("7_bp28c")
+autoplay = true
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+light_mask = 4
+visibility_layer = 4
+z_index = -10
+position = Vector2(100, -52)
+scale = Vector2(1.49444, 1.49444)
+texture = ExtResource("8_5ejhd")
+
+[node name="Sprite2D2" type="Sprite2D" parent="."]
+light_mask = 4
+visibility_layer = 4
+z_index = -10
+position = Vector2(530, -52)
+scale = Vector2(1.49444, 1.49444)
+texture = ExtResource("8_5ejhd")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+z_index = -9
+offset_left = -324.0
+offset_top = -8.0
+offset_right = 746.0
+offset_bottom = 1140.0
+color = Color(0.462745, 0.231373, 0.211765, 1)

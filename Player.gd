@@ -8,6 +8,7 @@ var mass = 10
 @onready var tilemap: TileManager = get_node("/root/Node2D/TileMap")
 # Called when the node enters the scene tree for the first time.
 @onready var UI: UI = get_node("/root/Node2D/UI")
+@onready var player_raycaster: RayCast2D = get_node("RayCast2D")
 var fuel = 100
 var fuelDrainRate = 5
 var is_moving: bool = false
@@ -42,6 +43,7 @@ func _physics_process(delta):
 		var percent = collisionTime / collisionDur * 100
 		position = lerp(originalPos, tilemap.get_tile_origin(collisionRID), percent / 100)
 		if percent >= 100:
+			on_tile_mined(tilemap.get_tile_type(collisionRID), tilemap.get_tile_hardness(collisionRID))
 			collisionTime = 0
 			handlingDrill = false
 			tilemap.delete_tile(collisionRID)
@@ -51,7 +53,6 @@ func _physics_process(delta):
 	var action_pressed = false
 	if Input.is_action_pressed("up"):
 		velocity.y -= 20 * delta
-		action_pressed = true
 	elif Input.is_action_pressed("down"):
 		action_pressed = true
 		pass
@@ -72,7 +73,11 @@ func _physics_process(delta):
 		if DEBUG:
 			collisionLoc.append(collision.get_position())
 			self.queue_redraw()
-	if collision and action_pressed:
+		
+	#player_raycaster.cast_to = Vector2.DOWN
+	#player_raycaster.force_raycast_update()
+	var is_on_ground = player_raycaster.is_colliding()
+	if collision and action_pressed and ((collision.get_collider().light_mask & 1)) and is_on_ground:
 		var shouldDel = false
 		if collision.get_position() and Input.is_action_pressed("down") and collision.get_angle() == 0:
 			shouldDel = true
@@ -84,5 +89,13 @@ func _physics_process(delta):
 			$CollisionShape2D.disabled = true
 			collisionRID = collision.get_collider_rid()
 			originalPos = position
-			collisionDur = tilemap.get_tile_hardness(collisionRID) / 6.0
+			collisionDur = 0.5 + int(sqrt(tilemap.get_tile_hardness(collisionRID)) / 6.0)
 			handlingDrill = true
+
+func on_tile_mined(tile_type, type_hardness):
+	var tile_to_str_dict = {
+		tilemap.TILE_STONE : "stone",
+		tilemap.TILE_GOLD : "gold"
+	}
+	if tile_type != tilemap.TILE_STONE:
+		UI.notification_ore_picked_up("1 " + tile_to_str_dict[tile_type])

@@ -1,0 +1,23 @@
+[gd_scene load_steps=4 format=3 uid="uid://b7tardq0m0vtt"]
+
+[ext_resource type="Texture2D" uid="uid://c5ji8xwcic6xp" path="res://stone_wall_1_by_devin_busha_d2f1j5l-fullview.jpg" id="1_0nn4x"]
+[ext_resource type="Script" path="res://Resources/wall.gd" id="1_ns6cr"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_bx2r4"]
+size = Vector2(258, 258)
+
+[node name="Wall" type="Node2D"]
+light_mask = 2
+script = ExtResource("1_ns6cr")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+light_mask = 2
+texture = ExtResource("1_0nn4x")
+
+[node name="StaticBody2D" type="StaticBody2D" parent="Sprite2D"]
+light_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Sprite2D/StaticBody2D"]
+light_mask = 2
+visibility_layer = 2
+shape = SubResource("RectangleShape2D_bx2r4")
