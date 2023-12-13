@@ -7,11 +7,21 @@ var mass = 10
 @export var DEBUG: bool = false
 @onready var tilemap: TileManager = get_node("/root/Node2D/TileMap")
 # Called when the node enters the scene tree for the first time.
+@onready var UI: UI = get_node("/root/Node2D/UI")
+var fuel = 100
+var fuelDrainRate = 5
+var is_moving: bool = false
+
 func _ready():
-	print("Start")
-	pass # Replace with function body.
-	
+	call_deferred("_setup")
+
+func _setup():
+	UI.update_fuel(fuel)
+
 func _process(delta):
+	if is_moving:
+		fuel -= fuelDrainRate * delta
+		UI.update_fuel(fuel)
 	if Input.is_action_just_pressed("toggleGravity"):
 		GravityOn = !GravityOn
 		print("Gravity changed")
@@ -51,7 +61,7 @@ func _physics_process(delta):
 	elif Input.is_action_pressed("right"):
 		velocity.x += force * delta
 		action_pressed = true
-		
+	is_moving = action_pressed
 	if GravityOn:
 		velocity.y += GRAVITY*delta
 	velocity.x *= (1-damping)
@@ -67,11 +77,9 @@ func _physics_process(delta):
 		if collision.get_position() and Input.is_action_pressed("down") and collision.get_angle() == 0:
 			shouldDel = true
 		elif collision.get_position() and Input.is_action_pressed("left") and collision.get_angle() != 0:
-			print("Left collision: ", collision.get_angle())
 			shouldDel = true
 		elif collision.get_position() and Input.is_action_pressed("right") and collision.get_angle() != 0:
 			shouldDel = true
-			print("Right collision: ", collision.get_angle())
 		if shouldDel:
 			$CollisionShape2D.disabled = true
 			collisionRID = collision.get_collider_rid()
