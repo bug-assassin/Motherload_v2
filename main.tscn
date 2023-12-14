@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://d2anuxxlufs0f"]
+[gd_scene load_steps=13 format=3 uid="uid://d2anuxxlufs0f"]
 
 [ext_resource type="TileSet" uid="uid://ckkhb1582s6hh" path="res://new_tile_set.tres" id="1_rxiq0"]
 [ext_resource type="Script" path="res://GenerateGround.gd" id="2_qa7hi"]
@@ -11,6 +11,43 @@
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_or4ty"]
 size = Vector2(15.5, 15.5)
+
+[sub_resource type="Animation" id="Animation_ceoo3"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:self_modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_1c2xk"]
+resource_name = "anim_player_dmg"
+length = 0.3
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:self_modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 0.101961, 0.101961, 1), Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_bbr8d"]
+_data = {
+"RESET": SubResource("Animation_ceoo3"),
+"anim_player_dmg": SubResource("Animation_1c2xk")
+}
 
 [node name="Node2D" type="Node2D"]
 
@@ -31,7 +68,7 @@ region_enabled = true
 region_rect = Rect2(16, 128, 16, 16)
 
 [node name="Camera2D" type="Camera2D" parent="Player"]
-zoom = Vector2(3, 3)
+zoom = Vector2(4, 4)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Player"]
 shape = SubResource("RectangleShape2D_or4ty")
@@ -39,13 +76,19 @@ shape = SubResource("RectangleShape2D_or4ty")
 [node name="RayCast2D" type="RayCast2D" parent="Player"]
 target_position = Vector2(0, 10)
 
+[node name="PlayerDmgAnim" type="AnimationPlayer" parent="Player"]
+libraries = {
+"": SubResource("AnimationLibrary_bbr8d")
+}
+
 [node name="UI" parent="." instance=ExtResource("5_32tqa")]
 
 [node name="WallManager" type="Node2D" parent="."]
 script = ExtResource("7_weu6l")
 
-[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+[node name="MainThemeSong" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("7_bp28c")
+volume_db = -20.873
 autoplay = true
 
 [node name="Sprite2D" type="Sprite2D" parent="."]

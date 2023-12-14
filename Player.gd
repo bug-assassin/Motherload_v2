@@ -2,13 +2,16 @@ extends CharacterBody2D
 
 var GRAVITY= 9.81
 var mass = 10
-@export var GravityOn: bool = true
 @export var damping = 0.01
 @export var DEBUG: bool = false
 @onready var tilemap: TileManager = get_node("/root/Node2D/TileMap")
 # Called when the node enters the scene tree for the first time.
 @onready var UI: UI = get_node("/root/Node2D/UI")
 @onready var player_raycaster: RayCast2D = get_node("RayCast2D")
+@onready var PlayerDmgAnim: AnimationPlayer = get_node("PlayerDmgAnim")
+
+#await get_tree().create_timer(cooldown).timeout
+var hull = 100
 var fuel = 100
 var fuelDrainRate = 5
 var is_moving: bool = false
@@ -23,9 +26,6 @@ func _process(delta):
 	if is_moving:
 		fuel -= fuelDrainRate * delta
 		UI.update_fuel(fuel)
-	if Input.is_action_just_pressed("toggleGravity"):
-		GravityOn = !GravityOn
-		print("Gravity changed")
 
 var collisionLoc = []
 func _draw():
@@ -63,8 +63,7 @@ func _physics_process(delta):
 		velocity.x += force * delta
 		action_pressed = true
 	is_moving = action_pressed
-	if GravityOn:
-		velocity.y += GRAVITY*delta
+	velocity.y += GRAVITY*delta
 	velocity.x *= (1-damping)
 	
 	var collision = move_and_collide(velocity)
@@ -99,3 +98,11 @@ func on_tile_mined(tile_type, type_hardness):
 	}
 	if tile_type != tilemap.TILE_STONE:
 		UI.notification_ore_picked_up("1 " + tile_to_str_dict[tile_type])
+
+func on_dmg_taken(dmg):
+	hull -= dmg
+	if hull <= 0:
+		print("Dead")
+		
+	PlayerDmgAnim.play("RESET")
+	PlayerDmgAnim.play("anim_player_dmg")

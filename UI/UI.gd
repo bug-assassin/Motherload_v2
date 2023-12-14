@@ -15,7 +15,7 @@ func _ready():
 func _process(delta):
 	pass
 
-func update_money_label(value):
+func update_money(value):
 	money_lbl.text = "$" + str(value)
 
 func update_fuel(percentage):
