@@ -3,7 +3,6 @@ extends CharacterBody2D
 var GRAVITY= 9.81
 var mass = 10
 @export var damping = 0.01
-@export var DEBUG: bool = false
 @onready var tilemap: TileManager = get_node("/root/Node2D/TileMap")
 # Called when the node enters the scene tree for the first time.
 @onready var UI: UI = get_node("/root/Node2D/UI")
@@ -43,7 +42,7 @@ func _physics_process(delta):
 		var percent = collisionTime / collisionDur * 100
 		position = lerp(originalPos, tilemap.get_tile_origin(collisionRID), percent / 100)
 		if percent >= 100:
-			on_tile_mined(tilemap.get_tile_type(collisionRID), tilemap.get_tile_hardness(collisionRID))
+			on_tile_mined(tilemap.get_tile_mineral(collisionRID), tilemap.get_tile_hardness(collisionRID))
 			collisionTime = 0
 			handlingDrill = false
 			tilemap.delete_tile(collisionRID)
@@ -69,7 +68,7 @@ func _physics_process(delta):
 	var collision = move_and_collide(velocity)
 	if collision:
 		velocity = velocity.slide(collision.get_normal())
-		if DEBUG:
+		if Constants.DEBUG:
 			collisionLoc.append(collision.get_position())
 			self.queue_redraw()
 		
@@ -91,13 +90,9 @@ func _physics_process(delta):
 			collisionDur = 0.5 + int(sqrt(tilemap.get_tile_hardness(collisionRID)) / 6.0)
 			handlingDrill = true
 
-func on_tile_mined(tile_type, type_hardness):
-	var tile_to_str_dict = {
-		tilemap.TILE_STONE : "stone",
-		tilemap.TILE_GOLD : "gold"
-	}
-	if tile_type != tilemap.TILE_STONE:
-		UI.notification_ore_picked_up("1 " + tile_to_str_dict[tile_type])
+func on_tile_mined(mineral: TileManager.Mineral, type_hardness):
+	if mineral.type != TileManager.MineralType.DIRT:
+		UI.notification_ore_picked_up("1 " + mineral.name)
 
 func on_dmg_taken(dmg):
 	hull -= dmg

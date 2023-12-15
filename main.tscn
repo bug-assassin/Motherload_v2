@@ -60,6 +60,7 @@ script = ExtResource("2_qa7hi")
 
 [node name="Player" type="CharacterBody2D" parent="."]
 position = Vector2(0, -30.245)
+scale = Vector2(0.9, 0.9)
 script = ExtResource("3_3vj4k")
 
 [node name="Sprite2D" type="Sprite2D" parent="Player"]
