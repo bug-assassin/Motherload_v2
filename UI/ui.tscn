@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://b10y47qysgfla"]
+[gd_scene load_steps=12 format=3 uid="uid://b10y47qysgfla"]
 
 [ext_resource type="Script" path="res://UI/UI.gd" id="1_smrgu"]
 [ext_resource type="Animation" uid="uid://c0rs71y1ff0j" path="res://ore_pickup_anim.res" id="2_4crlg"]
@@ -64,10 +64,13 @@ _data = {
 "ore_pickup_anim": ExtResource("2_4crlg")
 }
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7ke7l"]
+bg_color = Color(0.682353, 0.682353, 0.682353, 1)
+
 [node name="UI" type="CanvasLayer"]
 script = ExtResource("1_smrgu")
 
-[node name="Control" type="Control" parent="."]
+[node name="Main" type="Control" parent="."]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -75,7 +78,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="MarginContainer" type="MarginContainer" parent="Control"]
+[node name="MarginContainer" type="MarginContainer" parent="Main"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -87,7 +90,7 @@ theme_override_constants/margin_top = 10
 theme_override_constants/margin_right = 10
 theme_override_constants/margin_bottom = 10
 
-[node name="Money" type="Label" parent="Control/MarginContainer"]
+[node name="Money" type="Label" parent="Main/MarginContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
@@ -95,12 +98,12 @@ size_flags_vertical = 0
 text = "$9"
 label_settings = SubResource("LabelSettings_i0p8b")
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Control/MarginContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="Main/MarginContainer"]
 layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 0
 
-[node name="Hull" type="ProgressBar" parent="Control/MarginContainer/HBoxContainer"]
+[node name="Hull" type="ProgressBar" parent="Main/MarginContainer/HBoxContainer"]
 unique_name_in_owner = true
 clip_contents = true
 custom_minimum_size = Vector2(50, 50)
@@ -114,7 +117,7 @@ rounded = true
 fill_mode = 3
 show_percentage = false
 
-[node name="Label" type="Label" parent="Control/MarginContainer/HBoxContainer/Hull"]
+[node name="Label" type="Label" parent="Main/MarginContainer/HBoxContainer/Hull"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -127,7 +130,7 @@ grow_horizontal = 2
 grow_vertical = 2
 text = "Hull"
 
-[node name="Fuel" type="ProgressBar" parent="Control/MarginContainer/HBoxContainer"]
+[node name="Fuel" type="ProgressBar" parent="Main/MarginContainer/HBoxContainer"]
 unique_name_in_owner = true
 clip_contents = true
 custom_minimum_size = Vector2(50, 50)
@@ -141,7 +144,7 @@ rounded = true
 fill_mode = 3
 show_percentage = false
 
-[node name="Label" type="Label" parent="Control/MarginContainer/HBoxContainer/Fuel"]
+[node name="Label" type="Label" parent="Main/MarginContainer/HBoxContainer/Fuel"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -154,7 +157,7 @@ grow_horizontal = 2
 grow_vertical = 2
 text = "Fuel"
 
-[node name="OreNotificationLabel" type="Label" parent="Control"]
+[node name="OreNotificationLabel" type="Label" parent="Main"]
 self_modulate = Color(0.85098, 0.847059, 0, 0)
 layout_mode = 1
 anchors_preset = 8
@@ -162,10 +165,10 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = 254.0
-offset_top = 330.0
-offset_right = 380.0
-offset_bottom = 372.0
+offset_left = -146.0
+offset_top = -70.0
+offset_right = -20.0
+offset_bottom = -28.0
 grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 4
@@ -174,10 +177,146 @@ text = "1 copper"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="Control/OreNotificationLabel"]
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Main/OreNotificationLabel"]
 libraries = {
 "": SubResource("AnimationLibrary_2aq10")
 }
 
-[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="Control/OreNotificationLabel"]
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="Main/OreNotificationLabel"]
 stream = ExtResource("2_cqorl")
+
+[node name="Inventory" type="Control" parent="."]
+z_index = 1
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="Inventory"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 200
+theme_override_constants/margin_top = 200
+theme_override_constants/margin_right = 200
+theme_override_constants/margin_bottom = 200
+
+[node name="Panel" type="Panel" parent="Inventory/MarginContainer"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_7ke7l")
+
+[node name="TabContainer" type="TabContainer" parent="Inventory/MarginContainer"]
+layout_mode = 2
+
+[node name="Fuel" type="TabBar" parent="Inventory/MarginContainer/TabContainer"]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Inventory/MarginContainer/TabContainer/Fuel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="Inventory/MarginContainer/TabContainer/Fuel/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="ProgressBar" type="ProgressBar" parent="Inventory/MarginContainer/TabContainer/Fuel/HBoxContainer/MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+step = 1.0
+value = 30.0
+fill_mode = 3
+
+[node name="MarginContainer2" type="MarginContainer" parent="Inventory/MarginContainer/TabContainer/Fuel/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="GridContainer" type="GridContainer" parent="Inventory/MarginContainer/TabContainer/Fuel/HBoxContainer/MarginContainer2"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="$5" type="Button" parent="Inventory/MarginContainer/TabContainer/Fuel/HBoxContainer/MarginContainer2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+text = "$5"
+
+[node name="$10" type="Button" parent="Inventory/MarginContainer/TabContainer/Fuel/HBoxContainer/MarginContainer2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+text = "$10"
+
+[node name="$15" type="Button" parent="Inventory/MarginContainer/TabContainer/Fuel/HBoxContainer/MarginContainer2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+text = "$15"
+
+[node name="$20" type="Button" parent="Inventory/MarginContainer/TabContainer/Fuel/HBoxContainer/MarginContainer2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+text = "$20"
+
+[node name="$Full" type="Button" parent="Inventory/MarginContainer/TabContainer/Fuel/HBoxContainer/MarginContainer2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+text = "Full"
+
+[node name="Sell" type="TabBar" parent="Inventory/MarginContainer/TabContainer"]
+visible = false
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="Inventory/MarginContainer/TabContainer/Sell"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Inventory/MarginContainer/TabContainer/Sell/MarginContainer"]
+layout_mode = 2
+
+[node name="ItemList" type="ItemList" parent="Inventory/MarginContainer/TabContainer/Sell/MarginContainer/VBoxContainer"]
+layout_mode = 2
+item_count = 1
+item_0/text = "Test"
+
+[node name="Button" type="Button" parent="Inventory/MarginContainer/TabContainer/Sell/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 6
+text = "Sell All"
+
+[node name="Upgrades" type="TabBar" parent="Inventory/MarginContainer/TabContainer"]
+visible = false
+layout_mode = 2
+
+[node name="Button" type="Button" parent="Inventory/MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 0
+text = "X"
