@@ -9,7 +9,11 @@ Scaling: https://www.reddit.com/r/godot/comments/snqxec/screen_setup_and_resolut
 UI design: https://www.youtube.com/watch?v=1_OFJLyqlXI
 
 TODO:
-	- Finish Sell layout
-	- Do "Upgrades" layout
-	- Do Inventory layout
-	- Add Fuel layout code (update fuel progressbar, make buttons purchase X amount)
+	- Add Fuel layout code (make buttons purchase X amount)
+	- Add Sell layout code (display all items in inventory. sell items according to their value)
+	- Add Upgrade layout code
+	- Add drill to player
+
+Ideas:
+	- Add time limit and have to pay X amount every week to a debt
+		- Lose if can't pay
