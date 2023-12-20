@@ -4,7 +4,7 @@ var GRAVITY= 9.81
 var mass = 10
 @export var damping = 0.01
 @onready var tilemap: TileManager = get_node("/root/Node2D/TileMap")
-# Called when the node enters the scene tree for the first time.
+@warning_ignore("shadowed_global_identifier")
 @onready var UI: UI = get_node("/root/Node2D/UI")
 @onready var player_raycaster: RayCast2D = get_node("RayCast2D")
 @onready var PlayerDmgAnim: AnimationPlayer = get_node("PlayerDmgAnim")
@@ -23,6 +23,7 @@ func set_mineral_amount_in_inventory(mineral: TileManager.MineralType, amount):
 #await get_tree().create_timer(cooldown).timeout
 var hull = 100
 var fuel = 100
+const FUEL_COST_PER_LITER = 2
 var fuelDrainRate = 5
 var is_moving: bool = false
 var money = 10
@@ -34,6 +35,7 @@ func _setup():
 	UI.update_fuel(fuel)
 	UI.update_money(money)
 	UI.register_on_sell_clicked(on_sell_minerals_clicked)
+	UI.register_on_buy_fuel_clicked(on_buy_fuel_clicked)
 
 func on_sell_minerals_clicked():
 	var total = 0
@@ -47,6 +49,23 @@ func on_sell_minerals_clicked():
 	UI.update_inventory(inventory)
 	UI.update_money(money)
 
+func on_buy_fuel_clicked(cost: int):
+	var costToFillMax = (100 - floor(fuel)) * FUEL_COST_PER_LITER
+	cost = min(costToFillMax, cost)
+	if cost == 0: # Fill Max
+		cost = min(costToFillMax, money)
+	
+	if money < cost:
+		UI.notify_not_enough_money()
+		return
+	cost -= cost % FUEL_COST_PER_LITER # Don't buy partial liters of fuel
+	@warning_ignore("integer_division")
+	fuel += cost / FUEL_COST_PER_LITER
+	fuel = clamp(fuel, 0, 100)
+	money -= cost
+	UI.update_fuel(fuel)
+	UI.update_money(money)
+	
 func _process(delta):
 	if is_moving:
 		fuel -= fuelDrainRate * delta
@@ -68,7 +87,8 @@ func _physics_process(delta):
 		var percent = collisionTime / collisionDur * 100
 		position = lerp(originalPos, tilemap.get_tile_origin(collisionRID), percent / 100)
 		if percent >= 100:
-			on_tile_mined(tilemap.get_tile_mineral(collisionRID), tilemap.get_tile_hardness(collisionRID))
+			# tilemap.get_tile_hardness(collisionRID)
+			on_tile_mined(tilemap.get_tile_mineral(collisionRID))
 			collisionTime = 0
 			handlingDrill = false
 			tilemap.delete_tile(collisionRID)
@@ -116,7 +136,7 @@ func _physics_process(delta):
 			collisionDur = 0.5 + int(sqrt(tilemap.get_tile_hardness(collisionRID)) / 6.0)
 			handlingDrill = true
 
-func on_tile_mined(mineral: TileManager.Mineral, type_hardness):
+func on_tile_mined(mineral: TileManager.Mineral):
 	if mineral.type != TileManager.MineralType.DIRT:
 		set_mineral_amount_in_inventory(mineral.type, 1)
 		UI.notification_ore_picked_up("1 " + mineral.name)

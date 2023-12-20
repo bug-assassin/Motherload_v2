@@ -47,10 +47,21 @@ func update_fuel(percentage):
 func update_hull(percentage):
 	hull_progress.value = int(percentage)
 
-func notification_ore_picked_up(str: String):
-	ore_notification_label.text = str
+func notification_ore_picked_up(ore_str: String):
+	ore_notification_label.text = ore_str
 	ore_notification_anim.play("RESET")
 	ore_notification_anim.play("ore_pickup_anim")
 	
 func register_on_sell_clicked(callable):
 	%SellAllMinerals.connect("pressed", callable)
+
+func register_on_buy_fuel_clicked(callable):
+	var sellFuelButtons := %FuelButtonsController.get_children()
+	for button:Button in sellFuelButtons:
+		var cost = button.text.get_slice("$", 1)
+		if cost == "Full":
+			cost = 0
+		button.connect("pressed", callable.bind(int(cost)))
+
+func notify_not_enough_money():
+	print("TODO: notify_not_enough_money")

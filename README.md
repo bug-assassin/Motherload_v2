@@ -9,7 +9,6 @@ Scaling: https://www.reddit.com/r/godot/comments/snqxec/screen_setup_and_resolut
 UI design: https://www.youtube.com/watch?v=1_OFJLyqlXI
 
 TODO:
-	- Add Fuel layout code (make buttons purchase X amount)
 	- Add Upgrade layout code
 	- Add drill to player
 	

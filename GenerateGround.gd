@@ -11,15 +11,16 @@ class Mineral:
 	var common_depth : int
 	var atlas_no: int
 	var atlas_tile_no: Vector2i
-	func _init(type: MineralType, name: String, cost: int, weight: int, min_depth: int, common_depth: int, atlas_no: int, atlas_tile_coord: Vector2i):
-		self.type = type
-		self.name = name
-		self.cost = cost
-		self.weight = weight
-		self.min_depth = min_depth
-		self.common_depth = common_depth
-		self.atlas_no = atlas_no
-		self.atlas_tile_no = atlas_tile_coord
+	func _init(_type: MineralType, _name: String, _cost: int, _weight: int, _min_depth: int, _common_depth: int, _atlas_no: int, _atlas_tile_coord: Vector2i):
+		self.type = _type
+		self.name = _name
+		self.cost = _cost
+		self.weight = _weight
+		self.min_depth = _min_depth
+		self.common_depth = _common_depth
+		self.atlas_no = _atlas_no
+		self.atlas_tile_no = _atlas_tile_coord
+
 
 enum MineralType {
 	DIRT,
@@ -39,9 +40,9 @@ enum MineralType {
 class Tuple:
 	var first
 	var second
-	func _init(first, second):
-		self.first = first
-		self.second = second
+	func _init(_first, _second):
+		self.first = _first
+		self.second = _second
 
 const TILE_BACKGROUND_DIRT_ATLAS_NO = 1
 const TILE_BACKGROUND_DIRT = Vector2i(0, 2)
@@ -132,13 +133,10 @@ func get_tile_hardness(colliderId: RID) -> int:
 	return get_coords_for_body_rid(colliderId)[1]
 
 func get_tile_mineral(colliderId: RID) -> Mineral:
-	var name = get_cell_tile_data(0, get_coords_for_body_rid(colliderId)).get_custom_data("name")
+	var mineralName = get_cell_tile_data(0, get_coords_for_body_rid(colliderId)).get_custom_data("name")
 	if Constants.DEBUG:
-		print(name)
+		print(mineralName)
 	for mineral in minerals:
-		if mineral.name == name:
+		if mineral.name == mineralName:
 			return mineral
 	return null
-
-func _process(delta):
-	pass
