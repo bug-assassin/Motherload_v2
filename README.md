@@ -10,7 +10,6 @@ UI design: https://www.youtube.com/watch?v=1_OFJLyqlXI
 
 TODO:
 	- Add Fuel layout code (make buttons purchase X amount)
-	- Add Sell layout code (display all items in inventory. sell items according to their value)
 	- Add Upgrade layout code
 	- Add drill to player
 	

@@ -51,3 +51,6 @@ func notification_ore_picked_up(str: String):
 	ore_notification_label.text = str
 	ore_notification_anim.play("RESET")
 	ore_notification_anim.play("ore_pickup_anim")
+	
+func register_on_sell_clicked(callable):
+	%SellAllMinerals.connect("pressed", callable)

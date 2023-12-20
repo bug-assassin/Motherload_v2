@@ -25,12 +25,27 @@ var hull = 100
 var fuel = 100
 var fuelDrainRate = 5
 var is_moving: bool = false
+var money = 10
 
 func _ready():
 	call_deferred("_setup")
 
 func _setup():
 	UI.update_fuel(fuel)
+	UI.update_money(money)
+	UI.register_on_sell_clicked(on_sell_minerals_clicked)
+
+func on_sell_minerals_clicked():
+	var total = 0
+	for i in range(tilemap.minerals.size()):
+		var mineral = tilemap.minerals[i]
+		var amount = inventory[mineral.type] if mineral.type in inventory else 0
+		var mineralTotalValue = amount * mineral.cost
+		total += mineralTotalValue
+	money += total
+	inventory = {}
+	UI.update_inventory(inventory)
+	UI.update_money(money)
 
 func _process(delta):
 	if is_moving:

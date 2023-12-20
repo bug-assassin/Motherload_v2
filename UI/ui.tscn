@@ -304,7 +304,8 @@ unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="Button" type="Button" parent="Inventory/MarginContainer/TabContainer/Sell/MarginContainer/VBoxContainer"]
+[node name="SellAllMinerals" type="Button" parent="Inventory/MarginContainer/TabContainer/Sell/MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 text = "Sell All"
 
