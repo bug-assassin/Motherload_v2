@@ -49,7 +49,7 @@ const ATLAS_NO = 0
 const TILE_HEIGHT_METERS = 4
 
 const DIRT_INDEX = 0
-var minerals = [
+var minerals: Array[Mineral] = [
 	Mineral.new(MineralType.DIRT, "dirt", 0, 0, 0, 0, ATLAS_NO, Vector2i(1, 5)),
 	Mineral.new(MineralType.IRONIUM, "ironium", 30, 10, 5, 5, ATLAS_NO, Vector2i(0, 2)),
 	Mineral.new(MineralType.BRONZIUM, "bronzium", 60, 10, 5, 5, ATLAS_NO, Vector2i(0, 5)),

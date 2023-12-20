@@ -7,17 +7,35 @@ class_name UI
 @onready var inventory_fuel = %FuelInventory
 @onready var ore_notification_label = %OreNotificationLabel
 @onready var ore_notification_anim = ore_notification_label.get_node("AnimationPlayer")
-@onready var inventory = get_node("Inventory")
+@onready var inventory_ui = get_node("Inventory")
+
+#TODO, remove this
+@onready var tileManager: TileManager = get_node("/root/Node2D/TileMap")
+
 
 func _ready():
 	call_deferred("_setup")
 
 func _setup():
-	inventory.visible = false
+	inventory_ui.visible = false
+	update_inventory({})
 	
 func _input(event):
 	if event.is_action_pressed("inventory"):
-		inventory.visible = !inventory.visible
+		inventory_ui.visible = !inventory_ui.visible
+
+func update_inventory(inventory: Dictionary):
+	var item_list := %SellItemList
+	item_list.clear()
+	var total = 0
+	for i in range(tileManager.minerals.size()):
+		var mineral = tileManager.minerals[i]
+		var amount = inventory[mineral.type] if mineral.type in inventory else 0
+		var mineralTotalValue = amount * mineral.cost
+		item_list.add_item(str(amount) + " " + mineral.name + " x " + str(mineral.cost) + " = " + str(mineralTotalValue))
+		total += mineralTotalValue
+	item_list.add_item("Total: " + str(total))
+	item_list.set_item_metadata(-1, total)
 
 func update_money(value):
 	money_lbl.text = "$" + str(value)

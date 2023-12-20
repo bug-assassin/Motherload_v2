@@ -9,6 +9,17 @@ var mass = 10
 @onready var player_raycaster: RayCast2D = get_node("RayCast2D")
 @onready var PlayerDmgAnim: AnimationPlayer = get_node("PlayerDmgAnim")
 
+var inventory = {}
+
+func get_mineral_amount_in_inventory(mineral: TileManager.MineralType):
+	if mineral in inventory:
+		return inventory[mineral]
+func set_mineral_amount_in_inventory(mineral: TileManager.MineralType, amount):
+	if not (mineral in inventory):
+		inventory[mineral] = 0
+	inventory[mineral] += amount
+	UI.update_inventory(inventory)
+
 #await get_tree().create_timer(cooldown).timeout
 var hull = 100
 var fuel = 100
@@ -92,6 +103,7 @@ func _physics_process(delta):
 
 func on_tile_mined(mineral: TileManager.Mineral, type_hardness):
 	if mineral.type != TileManager.MineralType.DIRT:
+		set_mineral_amount_in_inventory(mineral.type, 1)
 		UI.notification_ore_picked_up("1 " + mineral.name)
 
 func on_dmg_taken(dmg):

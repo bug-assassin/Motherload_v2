@@ -13,7 +13,10 @@ TODO:
 	- Add Sell layout code (display all items in inventory. sell items according to their value)
 	- Add Upgrade layout code
 	- Add drill to player
-
+	
+Nice to do:
+	- Replace inventory with resource
+	
 Ideas:
 	- Add time limit and have to pay X amount every week to a debt
 		- Lose if can't pay
